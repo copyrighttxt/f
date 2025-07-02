@@ -195,7 +195,6 @@ body, html {
     }
 }
 
-/* Social Links Section */
 .social-links {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
@@ -248,7 +247,6 @@ body, html {
     text-align: center;
 }
 
-/* Social Link Colors */
 .instagram:hover {
     border-color: #e4405f;
     color: #e4405f;
@@ -279,7 +277,6 @@ body, html {
     color: #333;
 }
 
-/* About Section */
 .about {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
@@ -308,7 +305,6 @@ body, html {
     margin-right: auto;
 }
 
-/* Contact Section */
 .contact {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
@@ -355,7 +351,6 @@ body, html {
     margin-right: 10px;
 }
 
-/* Footer */
 footer {
     text-align: center;
     padding: 40px 0;

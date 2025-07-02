@@ -1,4 +1,3 @@
-// guns.lol style animated light purple dots (particles) falling fast, no cursor following
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 
@@ -9,7 +8,6 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-// Particle system
 const PARTICLE_COUNT = 60;
 const particles = [];
 
@@ -17,18 +15,16 @@ for (let i = 0; i < PARTICLE_COUNT; i++) {
     particles.push({
         x: Math.random() * window.innerWidth,
         y: Math.random() * window.innerHeight,
-        r: 2 + Math.random() * 1.5, // small dots
-        speed: 3 + Math.random() * 2, // fast falling
-        color: '#ffb3fa' // light purple/pink
+        r: 2 + Math.random() * 1.5,
+        speed: 3 + Math.random() * 2,
+        color: '#ffb3fa'
     });
 }
 
 function drawParticles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (const p of particles) {
-        // Fall down fast, no horizontal movement
         p.y += p.speed;
-        // Draw
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
         ctx.fillStyle = p.color;
@@ -46,16 +42,14 @@ function drawParticles() {
 }
 drawParticles();
 
-// --- Spotify status only via Lanyard ---
 const spotifyStatusElem = document.getElementById('spotify-status');
-const userId = '744379641707626556'; // <-- Your Discord User ID
+const userId = '744379641707626556'; // uhh user id
 
 function updateSpotifyStatus() {
   fetch(`https://api.lanyard.rest/v1/users/${userId}`)
     .then(res => res.json())
     .then(data => {
       if (data.success && data.data) {
-        // Spotify status (with link to song)
         if (spotifyStatusElem) {
           if (data.data.listening_to_spotify && data.data.spotify) {
             const s = data.data.spotify;
@@ -83,4 +77,4 @@ function updateSpotifyStatus() {
 }
 
 updateSpotifyStatus(); // Initial call
-setInterval(updateSpotifyStatus, 1000); // Update every 1000 ms
+setInterval(updateSpotifyStatus, 1000); // Update every sec

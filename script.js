@@ -1,4 +1,4 @@
-// guns.lol style animated light purple dots (particles) falling fast, no cursor following
+// idk
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 
@@ -9,7 +9,7 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-// Particle system
+// prtcle system
 const PARTICLE_COUNT = 60;
 const particles = [];
 
@@ -26,9 +26,7 @@ for (let i = 0; i < PARTICLE_COUNT; i++) {
 function drawParticles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (const p of particles) {
-        // Fall down fast, no horizontal movement
         p.y += p.speed;
-        // Draw
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
         ctx.fillStyle = p.color;
@@ -36,7 +34,6 @@ function drawParticles() {
         ctx.shadowBlur = 8;
         ctx.fill();
         ctx.shadowBlur = 0;
-        // Wrap to top
         if (p.y > canvas.height) {
             p.y = -p.r;
             p.x = Math.random() * window.innerWidth;
@@ -46,16 +43,14 @@ function drawParticles() {
 }
 drawParticles();
 
-// --- Spotify status only via Lanyard ---
 const spotifyStatusElem = document.getElementById('spotify-status');
-const userId = '744379641707626556'; // <-- Your Discord User ID
+const userId = '744379641707626556';
 
 function updateSpotifyStatus() {
   fetch(`https://api.lanyard.rest/v1/users/${userId}`)
     .then(res => res.json())
     .then(data => {
       if (data.success && data.data) {
-        // Spotify status (with link to song)
         if (spotifyStatusElem) {
           if (data.data.listening_to_spotify && data.data.spotify) {
             const s = data.data.spotify;
@@ -90,9 +85,8 @@ let ws = null;
 let reconnectAttempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 5;
 
-// Use a free API service for GitHub Pages compatibility
-const API_BASE_URL = 'https://api.jsonbin.io/v3/b'; // Free JSON storage
-const BIN_ID = '68694f568a456b7966bbd95b'; // Replace with your actual bin ID
+const API_BASE_URL = 'https://api.jsonbin.io/v3/b';
+const BIN_ID = '68694f568a456b7966bbd95b';
 const API_KEY = '$2a$10$dCTvDi167ZIn.6Xp8ZThG.MDJg7HYx.esd9gPUWj.qApinkojVFDi'; // Your JSONBin API key
 
 function connectWebSocket() {
@@ -124,12 +118,7 @@ function startPolling() {
     console.log('Using polling for status updates');
     
     function loadStatus() {
-        // For GitHub Pages, we'll use a free API service
-        // You can use JSONBin, JSONPlaceholder, or similar
         const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-        // Alternative with CORS proxy if needed:
-        // const API_URL = `https://cors-anywhere.herokuapp.com/https://api.jsonbin.io/v3/b/${BIN_ID}`;
-        
         fetch(API_URL, {
             method: 'GET',
             headers: {
@@ -156,10 +145,7 @@ function startPolling() {
         });
     }
     
-    // Load status immediately
     loadStatus();
-    
-    // Update status every 1 second
     setInterval(loadStatus, 1000);
 }
 

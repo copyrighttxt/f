@@ -159,8 +159,8 @@ function startPolling() {
     // Load status immediately
     loadStatus();
     
-    // Update status every 10 seconds for more responsive updates
-    setInterval(loadStatus, 10000);
+    // Update status every 1 second
+    setInterval(loadStatus, 1000);
 }
 
 // Initialize status loading

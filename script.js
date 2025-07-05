@@ -90,50 +90,16 @@ let ws = null;
 let reconnectAttempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 5;
 
+// Use a free API service for GitHub Pages compatibility
+const API_BASE_URL = 'https://api.jsonbin.io/v3/b'; // Free JSON storage
+const BIN_ID = '68694f568a456b7966bbd95b'; // Replace with your actual bin ID
+const API_KEY = '$2a$10$V2QL0NeiRRNoCbF9EaMzcuEmqIKR8fPOKT6tuvprKvvXgfsuRMkDG'; // Your JSONBin API key
+
 function connectWebSocket() {
-    // Replace this URL with your local server address
-    const WS_URL = 'ws://localhost:3000';
-    
-    try {
-        ws = new WebSocket(WS_URL);
-        
-        ws.onopen = function() {
-            console.log('WebSocket connected');
-            reconnectAttempts = 0;
-        };
-        
-        ws.onmessage = function(event) {
-            try {
-                const message = JSON.parse(event.data);
-                if (message.type === 'status_update') {
-                    updateStatusDisplay(message.data);
-                }
-            } catch (error) {
-                console.error('Failed to parse WebSocket message:', error);
-            }
-        };
-        
-        ws.onclose = function() {
-            console.log('WebSocket disconnected');
-            // Try to reconnect
-            if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-                reconnectAttempts++;
-                console.log(`Attempting to reconnect... (${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})`);
-                setTimeout(connectWebSocket, 2000);
-            } else {
-                console.log('Max reconnection attempts reached, falling back to polling');
-                startPolling();
-            }
-        };
-        
-        ws.onerror = function(error) {
-            console.error('WebSocket error:', error);
-        };
-        
-    } catch (error) {
-        console.error('Failed to connect WebSocket:', error);
-        startPolling();
-    }
+    // For GitHub Pages, we'll use polling instead of WebSocket
+    // since WebSocket requires a persistent server connection
+    console.log('Using polling for GitHub Pages compatibility');
+    startPolling();
 }
 
 function updateStatusDisplay(data) {
@@ -141,7 +107,7 @@ function updateStatusDisplay(data) {
     const statusImage = document.getElementById('status-image');
     
     if (statusText) {
-        statusText.textContent = data.text;
+        statusText.textContent = data.text || '✨ Status unavailable';
     }
     
     if (statusImage) {
@@ -154,34 +120,44 @@ function updateStatusDisplay(data) {
 }
 
 function startPolling() {
-    // Fallback to polling if WebSocket fails
-    console.log('Using polling fallback');
+    // Polling for GitHub Pages compatibility
+    console.log('Using polling for status updates');
     
     function loadStatus() {
-        // Replace this URL with your local server address
-        const API_URL = 'http://localhost:3000/api/status';
+        // For GitHub Pages, we'll use a free API service
+        // You can use JSONBin, JSONPlaceholder, or similar
+        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
         
-        fetch(API_URL)
-            .then(response => response.json())
-            .then(data => {
-                updateStatusDisplay(data);
-            })
-            .catch(error => {
-                console.error('Failed to load status:', error);
-                const statusText = document.getElementById('status-text');
-                if (statusText) {
-                    statusText.textContent = '✨ Status unavailable (server offline)';
-                }
-            });
+        fetch(API_URL, {
+            headers: {
+                'X-Master-Key': API_KEY,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.record && data.record.status) {
+                updateStatusDisplay(data.record.status);
+            } else {
+                updateStatusDisplay({ text: '✨ No status set yet' });
+            }
+        })
+        .catch(error => {
+            console.error('Failed to load status:', error);
+            const statusText = document.getElementById('status-text');
+            if (statusText) {
+                statusText.textContent = '✨ Status unavailable (check API configuration)';
+            }
+        });
     }
     
     // Load status immediately
     loadStatus();
     
-    // Update status every 30 seconds as fallback
-    setInterval(loadStatus, 30000);
+    // Update status every 10 seconds for more responsive updates
+    setInterval(loadStatus, 10000);
 }
 
-// Initialize WebSocket connection
+// Initialize status loading
 connectWebSocket();
 

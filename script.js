@@ -93,7 +93,7 @@ const MAX_RECONNECT_ATTEMPTS = 5;
 // Use a free API service for GitHub Pages compatibility
 const API_BASE_URL = 'https://api.jsonbin.io/v3/b'; // Free JSON storage
 const BIN_ID = '68694f568a456b7966bbd95b'; // Replace with your actual bin ID
-const API_KEY = '$2a$10$V2QL0NeiRRNoCbF9EaMzcuEmqIKR8fPOKT6tuvprKvvXgfsuRMkDG'; // Your JSONBin API key
+const API_KEY = '$2a$10$dCTvDi167ZIn.6Xp8ZThG.MDJg7HYx.esd9gPUWj.qApinkojVFDi'; // Your JSONBin API key
 
 function connectWebSocket() {
     // For GitHub Pages, we'll use polling instead of WebSocket
@@ -127,12 +127,17 @@ function startPolling() {
         // For GitHub Pages, we'll use a free API service
         // You can use JSONBin, JSONPlaceholder, or similar
         const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        // Alternative with CORS proxy if needed:
+        // const API_URL = `https://cors-anywhere.herokuapp.com/https://api.jsonbin.io/v3/b/${BIN_ID}`;
         
         fetch(API_URL, {
+            method: 'GET',
             headers: {
                 'X-Master-Key': API_KEY,
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            mode: 'cors'
         })
         .then(response => response.json())
         .then(data => {
